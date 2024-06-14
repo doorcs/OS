@@ -3,7 +3,8 @@
 #include <thread>
 
 int importantData;
-std::atomic_flag lock = ATOMIC_FLAG_INIT; // 초기화해주는게 좋은 코드
+std::atomic_flag lock;
+// C++20부터 `ATOMIC_FLAG_INIT`은 deprecated!! C++20부터 std::atmoic_flag의 생성자는 자동으로 clear state로 초기화해준다!!
 
 void func(int);
 
@@ -26,3 +27,13 @@ void func(int id) {
     std::this_thread::yield(); // 다른 쓰레드가 실행되도록
   }
 }
+
+/*
+  ref: https://en.cppreference.com/w/cpp/atomic/ATOMIC_FLAG_INIT
+  
+  This is the only way to initialize std::atomic_flag to a definite value: the value held after any other initialization is unspecified.
+	(until C++20)
+
+  This macro is no longer needed since default constructor of std::atomic_flag initializes it to clear state. It is kept for the compatibility with C.
+	(since C++20)
+*/
